@@ -15,16 +15,7 @@ function playConectFour() {
 
 function initGame() {
   return {
-    board: [
-      ["*", "1", "2", "3", "4", "5", "6", "7"],
-      ["1", "_", "_", "_", "_", "_", "_", "_"],
-      ["2", "_", "_", "_", "_", "_", "_", "_"],
-      ["3", "_", "_", "_", "_", "_", "_", "_"],
-      ["4", "_", "_", "_", "_", "_", "_", "_"],
-      ["5", "_", "_", "_", "_", "_", "_", "_"],
-      ["6", "_", "_", "_", "_", "_", "_", "_"],
-      
-    ],
+    board: [],
     TOKEN_X: `X`,
     TOKEN_Y: `Y`,
     TOKEN_EMPTY: `_`,
@@ -38,7 +29,9 @@ function initGame() {
     writeWelcome() {
       console.writeln(`Welcome to Connect 4 \n`);
     },
+    
     playGame() {
+      this.boardInit()
       do {
         this.boardView();
         this.readToken();
@@ -47,30 +40,35 @@ function initGame() {
       } while (!this.isConectFour("X") && !this.isConectFour("Y"));
       this.writeWinner();
     },
-
+    boardInit() {
+      for (let i = 0; i < this.ROWS; i++) {
+        (this.board[0] = ["*", "1", "2", "3", "4", "5", "6", "7"]),
+          (this.board[i + 1] = [`${i+1}`, "_", "_", "_", "_", "_", "_", "_"]);
+      }
+    },
     boardView() {
-      for (let row = 0; row <= this.ROWS ; row++) {
-        console.writeln(this.board[row]);}
+      for (let i = 0; i < this.ROWS; i++) {
+        console.writeln(this.board[i].join(` `));
+      }
     },
     readToken() {
       let readedColumn = 0;
       do {
         fullFillederror = false;
-        marginsError=false
+        marginsError = false;
         readedColumn = console.readNumber(`select column[1-7]`);
         if (readedColumn > 7 || readedColumn < 1) {
           marginsError = true;
           console.writeln(`Remember to insert a column number between 1-7`);
         }
-        
+
         if (!marginsError && this.board[1][readedColumn] !== `_`) {
           console.writeln(
             `The selected column is full filled, select another column [1-7]`
-
           );
           fullFillederror = true;
         }
-      } while (marginsError|| fullFillederror);
+      } while (marginsError || fullFillederror);
       this.movement = readedColumn;
     },
     putToken() {
@@ -216,7 +214,7 @@ function initYesNoDialog() {
     answer: ``,
     wantToContinue: true,
     read() {
-      let game= initGame();
+      let game = initGame();
       let error = false;
       do {
         this.answer = console.readString(
@@ -231,8 +229,8 @@ function initYesNoDialog() {
           this.wantToContinue = false;
         }
 
-        if(this.answer===`yes`){
-          this.wantToContinue=true;
+        if (this.answer === `yes`) {
+          this.wantToContinue = true;
         }
       } while (error);
     },
